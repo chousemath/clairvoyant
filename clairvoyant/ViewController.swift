@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import Foundation
 
 class ViewController: NSViewController {
     @IBOutlet weak var inputEmail: NSTextField!
@@ -59,7 +60,7 @@ class ViewController: NSViewController {
             let task = URLSession.shared.dataTask(with: req) { data, response, error in
                 guard let data = data, error == nil else {                                                 // check for fundamental networking error
                     if let err = error {
-                        print("error=\(err)")
+                        print("\nerror=\(err)\n")
                         return
                     } else {
                         print("fundamental network error")
@@ -75,8 +76,22 @@ class ViewController: NSViewController {
                     }
                 }
                 
-                if let responseString = String(data: data, encoding: .utf8) {
-                    print("responseString = \(responseString)")
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data, options:.allowFragments) as? [String : AnyObject] {
+                        if let accessToken = json["access_token"] as? String {
+                            print("access token: \(accessToken)")
+                        }
+                        
+                        if let refreshToken = json["refresh_token"] as? String {
+                            print("refresh token: \(refreshToken)")
+                        }
+                        
+                        if let expirationTime = json["expires_in"] as? Int {
+                            print("expiration time: \(expirationTime)")
+                        }
+                    }
+                } catch {
+                    print("Unable to parse json")
                 }
             }
             task.resume()

@@ -146,6 +146,11 @@
 					C82239271FF90CB30021BEDF = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 1;
+							};
+						};
 					};
 					C82239391FF90CB30021BEDF = {
 						CreatedOnToolsVersion = 9.2;
